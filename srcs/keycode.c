@@ -6,11 +6,32 @@
 /*   By: cparodi <cparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 10:33:35 by cparodi           #+#    #+#             */
-/*   Updated: 2024/08/15 16:39:19 by cparodi          ###   ########.fr       */
+/*   Updated: 2024/08/16 18:53:35 by cparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
+
+static void	zoom(t_fractal *fractal, int zoom_in, int x, int y)
+{
+	double	mouse_re;
+	double	mouse_im;
+	double	zoom_factor;
+
+	zoom_factor = 1.1;
+	mouse_re = fractal->center_re + (x - 800 / 2) * fractal->scale / 800;
+	mouse_im = fractal->center_im + (y - 800 / 2) * fractal->scale / 800;
+	if (zoom_in)
+	{
+		fractal->scale /= zoom_factor;
+	}
+	else
+	{
+		fractal->scale *= zoom_factor;
+	}
+	fractal->center_re = mouse_re - (x - 800 / 2) * fractal->scale / 800;
+	fractal->center_im = mouse_im - (y - 800 / 2) * fractal->scale / 800;
+}
 
 int	mouse_move(int x, int y, void *param)
 {
@@ -19,9 +40,8 @@ int	mouse_move(int x, int y, void *param)
 	return (0);
 }
 
-int	mouse_key(int keycode, int x, int y, t_fractal win)
+int	mouse_key(int keycode, int x, int y, t_fractal *win)
 {
-	(void)win;
 	if (keycode == 1)
 	{
 		printf("left click on (%d, %d)\n", x, y);
@@ -37,18 +57,18 @@ int	mouse_key(int keycode, int x, int y, t_fractal win)
 	else if (keycode == 4)
 	{
 		printf("zoom in (%d, %d)\n", x, y);
-		win.scale *= 0.8;
+		zoom(win, 1, x, y);
 	}
 	else if (keycode == 5)
 	{
 		printf("zoom out (%d, %d)\n", x, y);
-		win.scale /= 0.8;
+		zoom(win, 0, x, y);
 	}
-	fractal_mandelbrot(&win, 800, 800);
+	fractal_mandelbrot(win, 800, 800);
 	return (0);
 }
 
-int	enter_key(int keycode, t_fractal win)
+int	enter_key(int keycode, t_fractal *win)
 {
 	(void)win;
 	if (keycode == KEY_ESC)

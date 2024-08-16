@@ -6,7 +6,7 @@
 #    By: cparodi <cparodi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/13 11:15:18 by cparodi           #+#    #+#              #
-#    Updated: 2024/08/15 16:21:03 by cparodi          ###   ########.fr        #
+#    Updated: 2024/08/16 19:09:22 by cparodi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ OBJECTS =		${SOURCES:.c=.o}
 
 # Variables
 CC		= cc
-CFLAGS	= -Wall -Werror -Wextra -g3 -fsanitize=address
+CFLAGS	= -Wall -Werror -Wextra -o3
 RM		= rm -f
 
 # Loading Bar
@@ -39,7 +39,7 @@ GREEN		= \e[0;1;32m
 _GREEN		= \e[1;4;32m
 
 FILE_COUNT	= 0
-FILE_TOTAL	= 35
+FILE_TOTAL	= 4
 BAR_SIZE	= ${shell expr 100 \* ${FILE_COUNT} / ${FILE_TOTAL}}
 BAR_LOAD	= ${shell expr 23 \* ${FILE_COUNT} / ${FILE_TOTAL}}
 BAR_REST	= ${shell expr 23 - ${BAR_LOAD}}

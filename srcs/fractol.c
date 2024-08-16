@@ -6,7 +6,7 @@
 /*   By: cparodi <cparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:55:11 by cparodi           #+#    #+#             */
-/*   Updated: 2024/08/15 16:35:08 by cparodi          ###   ########.fr       */
+/*   Updated: 2024/08/16 19:01:16 by cparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ int	main(void)
 	win.center_re = -0.5;
 	win.center_im = 0.0;
 	win.scale = 4.0;
-	win.max_iter = 1000;
+	win.max_iter = 250;
 	fractal_mandelbrot(&win, 800, 800);
-	mlx_key_hook(win.window, enter_key, NULL);
+	mlx_key_hook(win.window, enter_key, &win);
 	mlx_mouse_hook(win.window, mouse_key, &win);
 	mlx_hook(win.window, 6, (1L << 6), mouse_move, NULL);
 	mlx_loop(win.mlx);

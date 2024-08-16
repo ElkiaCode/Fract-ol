@@ -6,7 +6,7 @@
 /*   By: cparodi <cparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:55:53 by cparodi           #+#    #+#             */
-/*   Updated: 2024/08/15 16:34:20 by cparodi          ###   ########.fr       */
+/*   Updated: 2024/08/16 18:46:50 by cparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ void		my_mlx_pixel_put(t_fractal *data, int x, int y, int color);
 
 // key control
 
-int			enter_key(int keycode, t_fractal win);
-int			mouse_key(int keycode, int x, int y, t_fractal win);
+int			enter_key(int keycode, t_fractal *win);
+int			mouse_key(int keycode, int x, int y, t_fractal *win);
 int			mouse_move(int x, int y, void *param);
 
 #endif
