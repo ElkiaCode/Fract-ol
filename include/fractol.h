@@ -6,7 +6,7 @@
 /*   By: cparodi <cparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:55:53 by cparodi           #+#    #+#             */
-/*   Updated: 2024/08/16 18:46:50 by cparodi          ###   ########.fr       */
+/*   Updated: 2024/09/10 14:27:35 by cparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,18 @@ typedef struct s_fractal
 	int		endian;
 }			t_fractal;
 
+// utils
+
+int			ft_strcmp(const char *s1, const char *s2);
+
 // mandelbrot
 
-void		fractal_mandelbrot(t_fractal *fractal, int width, int height);
+void		fractal_mandelbrot(t_fractal *fractal, int width, int height,
+				int argc, char **argv);
 void		draw_first(t_fractal *fractal, int y, int width, int height);
 void		draw(t_fractal *fractal, int x, int y, int width, int height);
 int			mandelbrot(t_nb coord, int max_iter);
+void		first_stage(t_fractal *fractal, int width, int height);
 
 // put pixels
 
@@ -63,5 +69,6 @@ void		my_mlx_pixel_put(t_fractal *data, int x, int y, int color);
 int			enter_key(int keycode, t_fractal *win);
 int			mouse_key(int keycode, int x, int y, t_fractal *win);
 int			mouse_move(int x, int y, void *param);
+int			close_window(void *param);
 
 #endif

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   keycode.c                                          :+:      :+:    :+:   */
+/*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cparodi <cparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 10:33:35 by cparodi           #+#    #+#             */
-/*   Updated: 2024/08/16 18:53:35 by cparodi          ###   ########.fr       */
+/*   Updated: 2024/09/05 15:38:42 by cparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,13 @@ int	mouse_move(int x, int y, void *param)
 	return (0);
 }
 
+int	close_window(void *param)
+{
+	(void)param;
+	printf("Exiting...\n");
+	exit(0);
+}
+
 int	mouse_key(int keycode, int x, int y, t_fractal *win)
 {
 	if (keycode == 1)
@@ -64,7 +71,7 @@ int	mouse_key(int keycode, int x, int y, t_fractal *win)
 		printf("zoom out (%d, %d)\n", x, y);
 		zoom(win, 0, x, y);
 	}
-	fractal_mandelbrot(win, 800, 800);
+	first_stage(win, 800, 800);
 	return (0);
 }
 
