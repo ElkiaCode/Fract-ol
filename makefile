@@ -6,7 +6,7 @@
 #    By: cparodi <cparodi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/13 11:15:18 by cparodi           #+#    #+#              #
-#    Updated: 2024/09/05 13:49:28 by cparodi          ###   ########.fr        #
+#    Updated: 2024/09/18 15:55:41 by cparodi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,17 +16,21 @@ EXE = fractol
 # Files
 SRC =	srcs/fractol.c \
 		srcs/hooks.c \
+		srcs/hooks2.c \
 		srcs/mlx_pixel.c \
 		srcs/fractal/mandelbrot.c \
-		srcs/utils/ft_strcmp.c
+		srcs/fractal/julia.c \
+		srcs/utils/ft_strcmp.c \
+		srcs/utils/ft_atof.c
 
 MLX = ./include/minilibx-linux
+PRINTF = ./srcs/utils/printf/libftprintf.a
 SOURCES =		${SRC}
 OBJECTS =		${SOURCES:.c=.o}
 
 # Variables
 CC		= cc
-CFLAGS	= -Wall -Werror -Wextra -o3
+CFLAGS	= -Wall -Werror -Wextra -o3 -g
 RM		= rm -f
 
 # Loading Bar
@@ -40,7 +44,7 @@ GREEN		= \e[0;1;32m
 _GREEN		= \e[1;4;32m
 
 FILE_COUNT	= 0
-FILE_TOTAL	= 5
+FILE_TOTAL	= 8
 BAR_SIZE	= ${shell expr 100 \* ${FILE_COUNT} / ${FILE_TOTAL}}
 BAR_LOAD	= ${shell expr 23 \* ${FILE_COUNT} / ${FILE_TOTAL}}
 BAR_REST	= ${shell expr 23 - ${BAR_LOAD}}
@@ -50,7 +54,8 @@ all:		${EXE}
 
 ${EXE}:		${OBJECTS}
 		@make -C ${MLX} > /dev/null 2>&1
-		@${CC} ${CFLAGS} ${OBJECTS} -Lmlx_linux -lmlx_Linux -L${MLX} -Imlx_linux -lXext -lX11 -lm -lz -o ${EXE}
+		@make -C ./srcs/utils/printf > /dev/null 2>&1
+		@${CC} ${CFLAGS} ${OBJECTS} ${PRINTF} -Lmlx_linux -lmlx_Linux -L${MLX} -Imlx_linux -lXext -lX11 -lm -lz -o ${EXE}
 		@echo "\n\n${GREEN}[✓] - ${_GREEN}Fractol${GREEN} Successfully Compiled!${RESET}"
 		@${RM} ${OBJECTS}
 
@@ -65,6 +70,7 @@ ${EXE}:		${OBJECTS}
 clean:
 		@${RM} ${OBJECTS}
 		@make -C ${MLX} clean > /dev/null
+		@make -C ./srcs/utils/printf clean > /dev/null
 		@echo "${WHITE}[!] - ${_WHITE}Fractol${WHITE} Successfully Cleaned!${RESET}"
 
 fclean: clean

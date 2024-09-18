@@ -6,13 +6,13 @@
 /*   By: cparodi <cparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 10:33:35 by cparodi           #+#    #+#             */
-/*   Updated: 2024/09/05 15:38:42 by cparodi          ###   ########.fr       */
+/*   Updated: 2024/09/18 17:55:40 by cparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
 
-static void	zoom(t_fractal *fractal, int zoom_in, int x, int y)
+void	zoom(t_fractal *fractal, int zoom_in, int x, int y)
 {
 	double	mouse_re;
 	double	mouse_im;
@@ -36,72 +36,73 @@ static void	zoom(t_fractal *fractal, int zoom_in, int x, int y)
 int	mouse_move(int x, int y, void *param)
 {
 	(void)param;
-	printf("moving on (%d, %d)\n", x, y);
+	(void)x;
+	(void)y;
 	return (0);
 }
 
-int	close_window(void *param)
+int	close_window(t_fractal *win, void *param)
 {
 	(void)param;
-	printf("Exiting...\n");
+	(void)win;
+	ft_printf("Exiting...\n");
+	// mlx_destroy_image(win->mlx, win->img);
+	// free(win->addr);
 	exit(0);
 }
 
 int	mouse_key(int keycode, int x, int y, t_fractal *win)
 {
-	if (keycode == 1)
+	if (keycode == 4)
 	{
-		printf("left click on (%d, %d)\n", x, y);
-	}
-	else if (keycode == 3)
-	{
-		printf("right click on (%d, %d)\n", x, y);
-	}
-	else if (keycode == 2)
-	{
-		printf("wheel click on (%d, %d)\n", x, y);
-	}
-	else if (keycode == 4)
-	{
-		printf("zoom in (%d, %d)\n", x, y);
 		zoom(win, 1, x, y);
+		if (win->p_color == 1)
+		{
+			if (win->color == 22)
+				win->color = 0;
+			else
+				win->color += 2;
+		}
 	}
 	else if (keycode == 5)
 	{
-		printf("zoom out (%d, %d)\n", x, y);
 		zoom(win, 0, x, y);
+		if (win->p_color == 1)
+		{
+			if (win->color == 22)
+				win->color = 0;
+			else
+				win->color += 2;
+		}
 	}
-	first_stage(win, 800, 800);
+	first_stage_mandelbrot(win, 800, 800);
 	return (0);
 }
 
 int	enter_key(int keycode, t_fractal *win)
 {
-	(void)win;
 	if (keycode == KEY_ESC)
 	{
-		printf("Exiting...\n");
+		ft_printf("Exiting...\n");
+		// mlx_destroy_image(win->mlx, win->img);
+		// free(win->addr);
 		exit(0);
 	}
 	else if (keycode == KEY_W || keycode == 65362)
-	{
-		printf("Moving up.\n");
-	}
+		win->center_im += 0.1;
 	else if (keycode == KEY_A || keycode == 65361)
-	{
-		printf("Moving left.\n");
-	}
+		win->center_re += 0.1;
 	else if (keycode == KEY_S || keycode == 65364)
-	{
-		printf("Moving down.\n");
-	}
+		win->center_im -= 0.1;
 	else if (keycode == KEY_D || keycode == 65363)
+		win->center_re -= 0.1;
+	if (keycode == 48)
 	{
-		printf("Moving right.\n");
+		if (win->p_color == 0)
+			win->p_color = 1;
+		else
+			win->p_color = 0;
 	}
-	else
-	{
-		printf("Keycode %d pressed.\n", keycode);
-	}
+	first_stage_mandelbrot(win, 800, 800);
 	return (0);
 }

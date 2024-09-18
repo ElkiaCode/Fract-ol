@@ -6,7 +6,7 @@
 /*   By: cparodi <cparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:19:52 by cparodi           #+#    #+#             */
-/*   Updated: 2024/09/10 14:47:52 by cparodi          ###   ########.fr       */
+/*   Updated: 2024/09/18 17:27:19 by cparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,16 @@ int	mandelbrot(t_nb coord, int max_iter)
 	return (iter);
 }
 
-void	draw(t_fractal *fractal, int x, int y, int width, int height)
+void	draw_mandelbrot(t_fractal *fractal, int x, int y)
 {
 	t_nb	coord;
 	int		iter;
 	int		color;
+	int		width;
+	int		height;
 
+	width = 800;
+	height = 800;
 	if (x >= width)
 		return ;
 	coord.real = fractal->center_re + (x - width / 2) * fractal->scale / width;
@@ -48,27 +52,35 @@ void	draw(t_fractal *fractal, int x, int y, int width, int height)
 	iter = mandelbrot(coord, fractal->max_iter);
 	color = 0;
 	if (iter < fractal->max_iter)
-		color = (iter * 255 / fractal->max_iter);
-	my_mlx_pixel_put(fractal, x, y, color);
-	draw(fractal, x + 1, y, width, height);
+		color = (iter * 255 / fractal->max_iter) << fractal->color;
+	if (fractal->p_color == 1)
+		my_mlx_pixel_put(fractal, x, y, color);
+	else if (fractal->p_color == 0)
+		my_mlx_pixel_put_nocolor(fractal, x, y, color);
+	draw_mandelbrot(fractal, x + 1, y);
 }
 
-void	draw_first(t_fractal *fractal, int y, int width, int height)
+void	draw_first_mandelbrot(t_fractal *fractal, int y, int width, int height)
 {
 	if (y >= height)
 		return ;
-	draw(fractal, 0, y, width, height);
-	draw_first(fractal, y + 1, width, height);
+	draw_mandelbrot(fractal, 0, y);
+	draw_first_mandelbrot(fractal, y + 1, width, height);
 }
 
-void	first_stage(t_fractal *fractal, int width, int height)
+void	first_stage_mandelbrot(t_fractal *fractal, int width, int height)
 {
-	draw_first(fractal, 0, width, height);
+	draw_first_mandelbrot(fractal, 0, width, height);
 	mlx_put_image_to_window(fractal->mlx, fractal->window, fractal->img, 0, 0);
 }
-void	fractal_mandelbrot(t_fractal *fractal, int width, int height, int argc,
-		char **argv)
+
+void	fractal_mandelbrot(t_fractal *fractal, int argc, char **argv)
 {
+	int	width;
+	int	height;
+
+	width = 800;
+	height = 800;
 	fractal->center_re = -0.5;
 	fractal->center_im = 0.0;
 	fractal->scale = 4.0;
@@ -76,5 +88,5 @@ void	fractal_mandelbrot(t_fractal *fractal, int width, int height, int argc,
 		fractal->max_iter = 50;
 	else
 		fractal->max_iter = atoi(argv[2]);
-	first_stage(fractal, width, height);
+	first_stage_mandelbrot(fractal, width, height);
 }

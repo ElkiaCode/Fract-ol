@@ -6,7 +6,7 @@
 /*   By: cparodi <cparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:55:11 by cparodi           #+#    #+#             */
-/*   Updated: 2024/09/10 14:32:21 by cparodi          ###   ########.fr       */
+/*   Updated: 2024/09/18 17:37:33 by cparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,23 @@ static char	*name_window(char **argv)
 	}
 }
 
-static void	Fractal_choose(t_fractal *fractal, int argc, char **argv)
+static void	fractal_choose(t_fractal *fractal, int argc, char **argv)
 {
 	if (ft_strcmp(argv[1], "Mandelbrot") == 0)
-		fractal_mandelbrot(fractal, 800, 800, argc, argv);
-	// else if (ft_strcmp(argv[1], "Julia") == 0)
-	// 	fractal_Julia();
+		fractal_mandelbrot(fractal, argc, argv);
+	else if (ft_strcmp(argv[1], "Julia") == 0)
+		fractal_julia(fractal, argc, argv);
+}
+
+static void	ft_error(int argc)
+{
+	if (argc < 2)
+	{
+		ft_printf("Enter one of these fractals as a parameter to launch the");
+		ft_printf(" program\n\nFractal : Julia <iter> <real> <imaginary>\n");
+		ft_printf("Fractal : Mandelbrot <iter> \n");
+		exit(0);
+	}
 }
 
 int	main(int argc, char **argv)
@@ -38,21 +49,24 @@ int	main(int argc, char **argv)
 	t_fractal	win;
 	char		*name;
 
-	if (argc < 2)
-	{
-		printf("Enter one of these fractals as a parameter to launch the");
-		printf(" program\n\nFractal : Julia\nFractal : Mandelbrot\n");
-		exit(0);
-	}
+	ft_error(argc);
 	name = name_window(argv);
 	win.mlx = mlx_init();
 	win.window = mlx_new_window(win.mlx, 800, 800, name);
 	win.img = mlx_new_image(win.mlx, 800, 800);
 	win.addr = mlx_get_data_addr(win.img, &win.bits_per_pixel, &win.line_length,
 			&win.endian);
-	Fractal_choose(&win, argc, argv);
-	mlx_key_hook(win.window, enter_key, &win);
-	mlx_mouse_hook(win.window, mouse_key, &win);
+	fractal_choose(&win, argc, argv);
+	if (ft_strcmp(argv[1], "Mandelbrot") == 0)
+	{
+		mlx_key_hook(win.window, key_hooks, &win);
+		mlx_mouse_hook(win.window, mouse_key, &win);
+	}
+	else if (ft_strcmp(argv[1], "Julia") == 0)
+	{
+		mlx_key_hook(win.window, key_hooks_julia, &win);
+		mlx_mouse_hook(win.window, mouse_key_julia, &win);
+	}
 	mlx_hook(win.window, 6, (1L << 6), mouse_move, NULL);
 	mlx_hook(win.window, 17, 0L, close_window, &win);
 	mlx_loop(win.mlx);
